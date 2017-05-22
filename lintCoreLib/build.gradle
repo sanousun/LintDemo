@@ -1,0 +1,27 @@
+apply plugin: 'java'
+
+def lint_version = "25.3.0"
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile "com.android.tools.lint:lint-api:$lint_version"
+    compile "com.android.tools.lint:lint-checks:$lint_version"
+}
+
+//注册MHCIssueRegistry，生成jar包
+jar {
+    manifest {
+        attributes("Lint-Registry": "com.maihaoche.lint.core.MHCIssueRegistry")
+    }
+}
+
+//为aar包提供jar包依赖配置
+defaultTasks 'assemble'
+
+configurations {
+    lintJarOutput
+}
+
+dependencies {
+    lintJarOutput files(jar)
+}

@@ -1,0 +1,49 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+//配置lint的jar包
+configurations {
+    lintJarImport
+}
+
+//将jar复制到lint目录下的lint.jar，因为在 compileLint 命令执行时会检查该文件，存在的话会添加到 lint 检查的队列中
+dependencies {
+    lintJarImport project(path: ":lintCoreLib", configuration: "lintJarOutput")
+}
+
+//当 Project 创建完所有任务的有向图后，通过 afterEvaluate 函数设置一个回调 Closure。将 copyLintJar 插入到 compileLint 之前执行
+task copyLintJar(type: Copy) {
+    from (configurations.lintJarImport) {
+        rename {
+            String fileName ->
+                'lint.jar'
+        }
+    }
+    into 'build/intermediates/lint/'
+}
+
+project.afterEvaluate {
+    def compileLintTask = project.tasks.find { it.name == 'compileLint' }
+    compileLintTask.dependsOn(copyLintJar)
+}
