@@ -50,7 +50,7 @@ project.afterEvaluate {
 
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
-version = "1.0.0"
+version = "1.0.1"
 group = "com.maihaoche.lint" // Maven Group ID for the artifact，一般填你唯一的包名
 def siteUrl = 'https://github.com/sanousun/LintDemo'      // 项目的主页
 def gitUrl = 'https://github.com/sanousun/LintDemo.git'   // Git仓库的url
@@ -62,7 +62,7 @@ install {
             project {
                 packaging 'aar'
                 // Add your description here
-                name 'mhc_lint' 	//项目描述
+                name 'mhc lint aar' 	//项目描述
                 url siteUrl
                 // Set your license
                 licenses {

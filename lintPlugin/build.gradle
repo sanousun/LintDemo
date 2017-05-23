@@ -1,0 +1,61 @@
+apply plugin: 'groovy'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    //gradle sdk
+    compile gradleApi()
+    //groovy sdk
+    compile localGroovy()
+
+    compile 'com.android.tools.build:gradle:2.3.2'
+}
+
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
+
+def siteUrl = 'https://github.com/sanousun/LintDemo'      // 项目的主页
+def gitUrl = 'https://github.com/sanousun/LintDemo.git'   // Git仓库的url
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier 'sources'
+}
+task docJar(type: Jar, dependsOn: javadoc) {
+    from tasks.javadoc.destinationDir
+    classifier 'doc'
+}
+
+group = 'com.maihaoche.lint'
+version = '1.0.3'
+
+publishing {
+    publications {
+        MyPublication(MavenPublication) {
+            from components.java
+            artifactId 'plugin'
+            groupId group
+            version version
+            artifact sourceJar
+            artifact docJar
+        }
+    }
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+    publications = ['MyPublication']
+    pkg {
+        repo = "mhc_lint"
+        name = "lint_plugin"	//发布到JCenter上的项目名字
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = ["Apache-2.0"]
+        publish = true
+    }
+}

@@ -38,21 +38,21 @@ class LintPlugin implements Plugin<Project> {
     private void applyTask(Project project, DomainObjectCollection<BaseVariant> variants) {
         project.dependencies {
 
-//            if (project.getPlugins().hasPlugin('com.android.application')) {
-//                compile('com.meituan.android.lint:lint:latest.release') {
-//                    force = true;
-//                }
-//            }
-//            else {
-//                provided('com.meituan.android.lint:lint:latest.release') {
-//                    force = true;
-//                }
-//            }
+            if (project.getPlugins().hasPlugin('com.android.application')) {
+                compile('com.maihaoche.lint:lint:+') {
+                    force = true;
+                }
+            }
+            else {
+                provided('com.maihaoche.lint:lint:+') {
+                    force = true;
+                }
+            }
 
         }
-//        project.configurations.all {
-//            resolutionStrategy.cacheDynamicVersionsFor 0, 'seconds'
-//        }
+        project.configurations.all {
+            resolutionStrategy.cacheDynamicVersionsFor 0, 'seconds'
+        }
 
         def archonTaskExists = false
 
