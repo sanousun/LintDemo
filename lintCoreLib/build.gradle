@@ -1,6 +1,6 @@
 apply plugin: 'java'
 
-def lint_version = "25.3.0"
+def lint_version = "25.3.2"
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
